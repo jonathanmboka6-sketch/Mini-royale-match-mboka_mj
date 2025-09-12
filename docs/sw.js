@@ -3,7 +3,7 @@ const CACHE_NAME = 'mini-royal-match-cache-v1';
 const FILES_TO_CACHE = [
   '/',
   '/index.html',
-  '/polices/luckiestguy.ttf', // Le chemin a été changé ici
+  '/fonts/luckiestguy.ttf', // Utilisez le chemin "/fonts/"
   // Ajoutez ici tous les autres fichiers de votre jeu (ex: images, fichiers js, css).
 ];
 
@@ -40,17 +40,13 @@ self.addEventListener('activate', (evt) => {
 });
 
 // Étape 3 : Interception des requêtes.
-// Le Service Worker va d'abord chercher les fichiers dans le cache.
-// S'il ne les trouve pas, il fait une requête réseau.
 self.addEventListener('fetch', (evt) => {
   evt.respondWith(
     caches.match(evt.request)
       .then((response) => {
-        // Le fichier est dans le cache, on le renvoie.
         if (response) {
           return response;
         }
-        // Le fichier n'est pas dans le cache, on le cherche sur le réseau.
         return fetch(evt.request);
       })
   );
