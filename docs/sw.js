@@ -2,8 +2,8 @@
 const CACHE_NAME = 'mini-royal-match-cache-v1';
 const FILES_TO_CACHE = [
   '/',
-  '/index.html',
-  '/fonts/luckiestguy.ttf', // Utilisez le chemin "/fonts/"
+  'index.html',
+  'fonts/luckiestguy.ttf', // Chemin relatif correct
   // Ajoutez ici tous les autres fichiers de votre jeu (ex: images, fichiers js, css).
 ];
 
