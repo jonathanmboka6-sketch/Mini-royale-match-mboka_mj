@@ -19,32 +19,106 @@
       background: linear-gradient(135deg, #6a11cb, #2575fc);
       margin: 0; padding: 0; color: #fff;
       overflow: hidden;
+      touch-action: manipulation;
     }
     #game-container {
       background: none;
       width: 100vw;
       height: 100vh;
       position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 20px;
+      box-sizing: border-box;
     }
-    h1 { margin: 10px; font-size: 28px; text-shadow: 2px 2px 5px rgba(0,0,0,0.3); color: #fff; }
-    #hud {
-      margin: 10px auto; font-size: 18px;
-      display: flex; justify-content: space-around;
-      background: rgba(0,0,0,0.3); padding: 10px;
-      border-radius: 10px; max-width: 500px;
+    
+    .header-container {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      width: 100%;
+      padding: 20px 0;
+      text-align: center;
+      top: 0;
+      left: 0;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      z-index: 100; 
     }
+    
+    .main-title {
+      font-family: 'Luckiest Guy', cursive;
+      font-size: 60px;
+      text-transform: uppercase;
+      text-shadow: 4px 4px 8px rgba(0,0,0,0.6);
+      color: #fff;
+      line-height: 1.1;
+      animation: fadein 2s infinite alternate;
+    }
+    
+    .subtitle-text {
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+        font-size: 24px;
+        color: #fff;
+        opacity: 0.8;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+        margin-top: -10px;
+    }
+    
+    @keyframes fadein {
+      from { opacity: 0.4; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1.05); }
+    }
+    
+    @keyframes pulse-shadow {
+        0% { transform: scale(1); text-shadow: 4px 4px 8px rgba(0,0,0,0.6); }
+        50% { transform: scale(1.05); text-shadow: 6px 6px 12px rgba(0,0,0,0.8); }
+        100% { transform: scale(1); text-shadow: 4px 4px 8px rgba(0,0,0,0.6); }
+    }
+    
+    .hud-bar {
+      margin-top: 20px; 
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      width: 95%;
+      max-width: 900px;
+      font-family: 'Luckiest Guy', cursive;
+      text-transform: uppercase;
+      color: #fff;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
     #grid {
-      display: grid; gap: 4px;
-      justify-content: center; margin: 15px auto; padding: 10px;
-      background: rgba(255,255,255,0.2); border-radius: 15px;
+      display: grid; 
+      gap: 1.5vw;
+      justify-content: center; 
+      align-content: center;
+      margin: 15px auto; 
+      padding: 2.5vw;
+      background: rgba(255,255,255,0.2); 
+      border-radius: 15px;
       box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+      max-width: 90vw;
+      max-height: 80vh; 
     }
     .cell {
-      width: 55px; height: 55px;
-      font-size: 30px; display: flex;
-      align-items: center; justify-content: center;
-      border-radius: 12px; background: rgba(255,255,255,0.9);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3); cursor: pointer;
+      width: 12vw; 
+      height: 12vw; 
+      max-width: 80px; 
+      max-height: 80px; 
+      font-size: 6vw; 
+      max-font-size: 48px; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px; 
+      background: rgba(255,255,255,0.9);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3); 
+      cursor: pointer;
       transition: transform 0.15s, background 0.2s;
     }
     .cell.selected { transform: scale(1.15); background: #ffeaa7; border: 2px solid #ffbe76; }
@@ -53,70 +127,93 @@
     .cell.chest { background: #ffd700; }
     .cell.rocket { background: #9b59b6; font-size: 32px; }
     .cell.disco { background: #f1c40f; font-size: 32px; }
-    /* La classe .cell.box a été supprimée */
 
-    .exploding { animation: explode 0.3s ease-out; }
+    /* NOUVELLES ANIMATIONS */
     @keyframes explode {
       0% { transform: scale(1); opacity: 1; }
       50% { transform: scale(1.4); opacity: 0.6; }
       100% { transform: scale(0); opacity: 0; }
     }
-    .clearing-row { animation: clear-row 0.5s forwards; }
-    @keyframes clear-row {
-      from { transform: scale(1); opacity: 1; }
-      to { transform: translateX(100vw) scale(0) opacity: 0; }
+    .exploding {
+      animation: explode 0.3s ease-out forwards;
     }
-    .clearing-col { animation: clear-col 0.5s forwards; }
-    @keyframes clear-col {
-      from { transform: scale(1); opacity: 1; }
-      to { transform: translateY(100vh) scale(0) opacity: 0; }
+    
+    /* Animation pour l'explosion en cascade */
+    @keyframes cascading-explode {
+        0% { transform: scale(1); opacity: 1; }
+        100% { transform: scale(0); opacity: 0; }
     }
 
-    #buttons { margin: 15px; }
+    .cascading-exploding {
+        animation: cascading-explode 0.4s ease-out forwards;
+    }
+
+    @keyframes bomb-explosion {
+      0% { transform: scale(1); background: #ff7675; }
+      50% { transform: scale(1.4); background: #f1c40f; }
+      100% { transform: scale(0.9); background: #ff7675; }
+    }
+    .bomb-explosion {
+      animation: bomb-explosion 0.4s ease-out;
+    }
+    
+    #buttons { 
+      margin-top: 0; 
+      margin-bottom: 15px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
     button {
-      margin: 5px; padding: 10px 20px;
+      margin: 5px; padding: 15px 30px;
       border: none; border-radius: 8px;
-      background: #00cec9; color: white; font-size: 16px;
+      background: #00cec9; color: white; font-size: 18px;
       cursor: pointer; box-shadow: 0 3px 6px rgba(0,0,0,0.2);
       transition: background 0.2s;
     }
     button:hover { background: #55efc4; }
-    #message { font-size: 22px; margin: 15px; font-weight: bold; text-shadow: 2px 2px 6px rgba(0,0,0,0.4); }
+    #buyLifeBtn, #newBtn, #buyTimeBtn {
+        padding: 20px 40px;
+        font-size: 20px;
+    }
+    
     #welcome {
-      margin-top: 100px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      animation: fadein 2s ease-in-out infinite alternate;
+      justify-content: center;
+      animation: fadein 2s infinite alternate;
+      text-align: center;
     }
-    @keyframes fadein {
-      from { opacity: 0.4; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1.05); }
+    #welcome h1 {
+        font-size: 40px;
+        margin: 20px;
+        padding: 0 20px;
+        font-family: 'Luckiest Guy', cursive;
     }
-
+    #welcome p {
+        font-size: 18px;
+    }
+    
     /* Styles Royal Match */
-    .hud-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 90%;
-      max-width: 900px;
-      margin: 20px auto;
-      font-family: 'Luckiest Guy', cursive;
-      text-transform: uppercase;
-      color: #fff;
-      flex-wrap: wrap;
-    }
     .info-panel {
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       padding: 10px 20px;
       border-radius: 25px;
       border: 3px solid #fff;
       background: linear-gradient(180deg, #51a4e2, #25608d);
       box-shadow: 0 5px 10px rgba(0,0,0,0.4);
-      min-width: 100px;
+      min-width: 80px;
+      height: 80px;
       margin: 5px;
       flex: 1;
     }
@@ -130,6 +227,7 @@
       opacity: 0.8;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     }
+    
     .hud-title {
         font-family: 'Luckiest Guy', cursive;
         text-transform: uppercase;
@@ -161,6 +259,43 @@
       75% { transform: scale(1.05); }
       100% { transform: scale(1); }
     }
+    
+    /* Nouvelles classes pour le pop-up de message */
+    #message-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      z-index: 1000;
+      font-family: 'Luckiest Guy', cursive;
+      color: white;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+      text-align: center;
+      padding: 20px;
+    }
+
+    #message-popup {
+      font-size: 5vw;
+      max-font-size: 60px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 20px 40px;
+      border-radius: 15px;
+      border: 3px solid #fff;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+      animation: pop-in 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+    }
+
+    #sub-message {
+      font-size: 2vw;
+      max-font-size: 24px;
+      margin-top: 10px;
+    }
+
+    @keyframes pop-in {
+      0% { transform: scale(0); opacity: 0; }
+      80% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -173,7 +308,10 @@
     </div>
 
     <div id="game" style="display:none;">
-      <h1 class="hud-title">Mini Royal Match - Mboka_mj</h1>
+      <div class="header-container">
+          <h1 class="main-title">Mini Royal Match</h1>
+          <p class="subtitle-text">Mboka_mj</p>
+      </div>
       <div class="hud-bar">
         <div class="info-panel">
           <div>Score</div>
@@ -204,33 +342,45 @@
       <div id="grid"></div>
       <div id="buttons">
         <button id="buyLifeBtn">Acheter une vie (2⭐️)</button>
+        <button id="buyTimeBtn">Acheter du temps (2⭐️)</button>
         <button id="newBtn">Nouvelle Partie</button>
         <button id="useBombBtn" style="display:none;">Utiliser une Bombe (<span id="bombCount">0</span>)</button>
-        <button id="useRocketBtn" style="display:none;">Utiliser une Fusée (<span id="rocketCount">0</span>)</button>
-        <button id="useDiscoBtn" style="display:none;">Utiliser une Boule Disco (<span id="discoCount">0</span>)</button>
       </div>
-      <div id="message"></div>
     </div>
+  </div>
+
+  <div id="message-container" style="display:none;">
+      <div id="message-popup">
+          <div id="main-message"></div>
+          <div id="sub-message"></div>
+      </div>
   </div>
 
 <script>
   const BASE_TIME = 90;
+  const TIME_DECREMENT_PER_LEVEL = 3;
+  const TIME_BONUS_FOR_STARS = 15;
   const BASE_TARGET = 100;
   const SCORE_PER_TILE = 2;
-  const SCORE_PER_BOMB_TILE = 1;
-  const SCORE_PER_ROCKET_TILE = 1;
-  const MAX_BOMBS = 3;
-  const CHEST_TRIGGER_SCORE = 50;
-  const CHEST_BOMBS_COUNT = 5;
-  const BOMB_TILES_DESTROYED = 3;
+  const BOMB_TILES_TO_DESTROY = 4;
+  const CHEST_BOMBS_COUNT = 3;
+  const CHEST_POINTS = 20;
   const STAR_COST_FOR_LIFE = 2;
-  const REGENERATION_TIME = 20 * 60 * 1000;
+  const STAR_COST_FOR_TIME = 2;
+  const REGENERATION_TIME = 2 * 60 * 1000;
+  const INACTIVITY_TIME_FOR_CHEST = 15;
+  const ROCKET_ICON = '🚀';
+  const DISCO_ICON = '🎇';
 
   const ICON_SETS = [
     ['🍓','🍊','🍋','🍎','🍉'],
     ['💎','🔷','🔶','🔺','🔹'],
     ['🌟','🔥','⚡','❄️','☘️'],
-    ['🐱','🐶','🐸','🐵','🐼']
+    ['🐱','🐶','🐸','🐵','🐼'],
+    ['🌍','🌙','☀️','✨','⭐'],
+    ['🛡️','⚔️','👑','🏰','🏹'],
+    ['🧪','🧫','🧬','🔬','🦠'],
+    ['🎼','🎵','🎶','🎸','🥁']
   ];
 
   const LEVEL_CONFIGS = [
@@ -248,26 +398,63 @@
       [1,0],[1,1],[1,6],[1,7],
       [6,0],[6,1],[6,6],[6,7],
       [7,0],[7,1],[7,6],[7,7]
+    ]},
+    { name: "Sablier", rows: 8, cols: 8, hiddenCells: [
+      [0,0],[0,1],[0,6],[0,7],
+      [1,0],[1,1],[1,6],[1,7],
+      [2,0],[2,1],[2,6],[2,7],
+      [5,0],[5,1],[5,6],[5,7],
+      [6,0],[6,1],[6,6],[6,7],
+      [7,0],[7,1],[7,6],[7,7]
+    ]},
+    { name: "Trou Central", rows: 8, cols: 8, hiddenCells: [
+      [2,2],[2,3],[2,4],[2,5],
+      [3,2],[3,3],[3,4],[3,5],
+      [4,2],[4,3],[4,4],[4,5],
+      [5,2],[5,3],[5,4],[5,5]
     ]}
   ];
 
   let ROWS, COLS, board=[], selected=null;
   let score=0, level=1, target=BASE_TARGET, timeLeft=BASE_TIME;
-  let timerInterval=null, animating=false, bombsUsed=0;
-  let bombTimer=null, bombsInStock = 0;
-  let rocketsInStock = 0;
-  let discoInStock = 0;
-  let nextChestScore = CHEST_TRIGGER_SCORE;
-  let isUsingBomb = false, isUsingRocket = false, isUsingDisco = false;
+  let timerInterval=null, animating=false;
+  let bombsInStock = 0;
+  let nextChestScore = null;
+  let isUsingBomb = false;
   let levelCompleted = false;
-  let chestsSpawned = 0;
+  let chestSpawnedThisLevel = false;
   let stars = 0;
   let lives = 3;
   let regenerationInterval = null;
   let levelConfig;
+  
+  let inactivityTimer = null;
+  let inactivityTime = 0;
+  let hasMadeValidMove = false;
+  
+  let messageTimeoutId = null;
 
   function randInt(n){ return Math.floor(Math.random()*n); }
   function wait(ms){ return new Promise(res=>setTimeout(res,ms)); }
+
+  function displayMessage(mainText, subText = "", duration = 2000) {
+      clearTimeout(messageTimeoutId);
+      const container = document.getElementById('message-container');
+      const main = document.getElementById('main-message');
+      const sub = document.getElementById('sub-message');
+
+      container.style.display = 'block';
+      container.style.transform = 'translate(-50%, -50%) scale(0)';
+      main.textContent = mainText;
+      sub.textContent = subText;
+      
+      container.offsetWidth; 
+      container.style.transform = 'translate(-50%, -50%) scale(1)';
+
+      messageTimeoutId = setTimeout(() => {
+          container.style.display = 'none';
+      }, duration);
+  }
 
   function createBoard(){
     board = [];
@@ -296,19 +483,27 @@
   function renderBoard(){
     const grid=document.getElementById("grid");
     grid.innerHTML="";
-    grid.style.gridTemplateColumns=`repeat(${COLS},55px)`;
+    
+    if (level === 6) {
+        grid.style.gap = "1vw";
+    } else {
+        grid.style.gap = "1.5vw";
+    }
+    grid.style.gridTemplateColumns=`repeat(${COLS},minmax(0,1fr))`;
+    
     for(let r=0;r<ROWS;r++){
       for(let c=0;c<COLS;c++){
         const cell=document.createElement("div");
         cell.className="cell";
-        if(board[r][c]===null){
+        const icon = board[r][c];
+
+        if(icon===null){
           cell.classList.add("hidden-cell");
         } else {
-          cell.textContent=board[r][c];
-          if(board[r][c]==="💣") cell.classList.add("bomb");
-          if(board[r][c]==="🎁") cell.classList.add("chest");
-          if(board[r][c]==="🚀") cell.classList.add("rocket");
-          if(board[r][c]==="🌈") cell.classList.add("disco");
+          cell.textContent=icon;
+          if(icon==="🎁") cell.classList.add("chest");
+          else if(icon===ROCKET_ICON) cell.classList.add("rocket");
+          else if(icon===DISCO_ICON) cell.classList.add("disco");
           cell.onclick=()=>selectCellWrapper(r,c,cell);
         }
         grid.appendChild(cell);
@@ -316,8 +511,17 @@
     }
   }
 
-  function selectCell(r,c,el){
+  async function selectCell(r,c,el){
     if(animating || board[r][c]==null) return;
+    
+    if(board[r][c] === ROCKET_ICON) {
+      await activateRocket(r, c);
+      return;
+    }
+    if(board[r][c] === DISCO_ICON) {
+      
+    }
+    
     if(selected==null){
       selected={r,c,el}; el.classList.add("selected");
     }else{
@@ -333,22 +537,41 @@
 
   async function swapAndCheck(r1,c1,r2,c2){
     if(Math.abs(r1-r2)+Math.abs(c1-c2)!==1) return;
+
+    const firstIsSpecial = board[r1][c1] === ROCKET_ICON || board[r1][c1] === DISCO_ICON;
+    const secondIsSpecial = board[r2][c2] === ROCKET_ICON || board[r2][c2] === DISCO_ICON;
+
+    if (firstIsSpecial || secondIsSpecial) {
+      if(board[r1][c1] === DISCO_ICON) {
+        await activateDisco(r1, c1, board[r2][c2]);
+      } else if (board[r2][c2] === DISCO_ICON) {
+        await activateDisco(r2, c2, board[r1][c1]);
+      } else if (board[r1][c1] === ROCKET_ICON) {
+        await activateRocket(r1, c1);
+      } else if (board[r2][c2] === ROCKET_ICON) {
+        await activateRocket(r2, c2);
+      }
+      return;
+    }
     
     [board[r1][c1],board[r2][c2]]=[board[r2][c2],board[r1][c1]];
     
     const initialMatches = findMatches();
     if(initialMatches.matches.length===0){
       [board[r1][c1],board[r2][c2]]=[board[r2][c2],board[r1][c1]];
+      renderBoard();
       return;
     }
     
+    hasMadeValidMove = true;
+
     renderBoard();
     await handleMatches(initialMatches);
   }
 
   function findMatches(){
     let matches=[];
-    let specialCreates = [];
+    // Matches horizontaux
     for(let r=0;r<ROWS;r++){
       for(let c=0;c<COLS;c++){
           if (c + 2 < COLS && board[r][c] !== null && board[r][c] === board[r][c+1] && board[r][c] === board[r][c+2]) {
@@ -358,11 +581,11 @@
                   len++;
               }
               matches.push({r,c,len,dir:"row", type: board[r][c]});
-              if (len >= 4) { specialCreates.push({ r: r, c: c + Math.floor(len / 2), type: len >= 5 ? "🌈" : "🚀" }); }
               c += len - 1;
           }
       }
     }
+    // Matches verticaux
     for(let c=0;c<COLS;c++){
       for(let r=0;r<ROWS;r++){
           if (r + 2 < ROWS && board[r][c] !== null && board[r][c] === board[r+1][c] && board[r][c] === board[r+2][c]) {
@@ -372,123 +595,235 @@
                   len++;
               }
               matches.push({r,c,len,dir:"col", type: board[r][c]});
-              if (len >= 4) { specialCreates.push({ r: r + Math.floor(len / 2), c: c, type: len >= 5 ? "🌈" : "🚀" }); }
               r += len - 1;
           }
       }
     }
-    return { matches, specialCreates };
+    return { matches };
+  }
+  
+  async function animateBombEffect(centerR, centerC) {
+    const grid = document.getElementById('grid');
+    const cellsToAnimate = [];
+    for (let dr = -1; dr <= 1; dr++) {
+        for (let dc = -1; dc <= 1; dc++) {
+            if (dr === 0 && dc === 0) continue;
+            const nr = centerR + dr, nc = centerC + dc;
+            if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS && board[nr][nc] !== null && !isHidden(nr, nc)) {
+                cellsToAnimate.push(grid.children[nr * COLS + nc]);
+            }
+        }
+    }
+    for (let i = 0; i < cellsToAnimate.length; i++) {
+        cellsToAnimate[i].classList.add('bomb-explosion');
+        await wait(50);
+    }
+    await wait(400);
+    cellsToAnimate.forEach(cell => cell.classList.remove('bomb-explosion'));
+  }
+  
+  async function activateRocket(r, c) {
+    animating = true;
+    
+    const direction = Math.random() < 0.5 ? "row" : "col";
+    const cellsToClear = [];
+    if (direction === "row") {
+        for (let cc = 0; cc < COLS; cc++) {
+            if (board[r][cc] !== null && (r !== r || cc !== c)) {
+                cellsToClear.push({ r: r, c: cc });
+            }
+        }
+    } else {
+        for (let rr = 0; rr < ROWS; rr++) {
+            if (board[rr][c] !== null && (rr !== r || c !== c)) {
+                cellsToClear.push({ r: rr, c: c });
+            }
+        }
+    }
+    
+    const rocketCell = document.getElementById('grid').children[r * COLS + c];
+    if(rocketCell) rocketCell.classList.add('cascading-exploding');
+    board[r][c] = null;
+    
+    await wait(200);
+
+    for (const cell of cellsToClear) {
+      const gridCell = document.getElementById('grid').children[cell.r * COLS + cell.c];
+      if (gridCell) {
+          gridCell.classList.add('cascading-exploding');
+          score += SCORE_PER_TILE;
+          updateHUD();
+          board[cell.r][cell.c] = null;
+          await wait(50);
+      }
+    }
+
+    updateHUD();
+    renderBoard();
+    await wait(400);
+
+    applyGravity();
+    renderBoard();
+    await wait(200);
+
+    await handleMatches();
+    animating = false;
+  }
+
+  async function activateDisco(r, c, targetIcon) {
+    animating = true;
+    const cellsToClear = [];
+    
+    const discoIcon = board[r][c];
+    board[r][c] = null;
+    
+    for (let rr = 0; rr < ROWS; rr++) {
+      for (let cc = 0; cc < COLS; cc++) {
+        if (board[rr][cc] === targetIcon) {
+          cellsToClear.push({ r: rr, c: cc });
+        }
+      }
+    }
+    
+    const discoCell = document.getElementById('grid').children[r * COLS + c];
+    if(discoCell) discoCell.classList.add('cascading-exploding');
+    
+    await wait(200);
+
+    for (const cell of cellsToClear) {
+        const gridCell = document.getElementById('grid').children[cell.r * COLS + cell.c];
+        if (gridCell) {
+            gridCell.classList.add('cascading-exploding');
+            score += SCORE_PER_TILE;
+            updateHUD();
+            board[cell.r][cell.c] = null;
+            await wait(20);
+        }
+    }
+
+    updateHUD();
+    renderBoard();
+    await wait(400);
+
+    applyGravity();
+    renderBoard();
+    await wait(200);
+    
+    await handleMatches();
+    animating = false;
   }
   
   async function handleMatches(initialMatches = null){
-    animating=true;
-    let { matches, specialCreates } = initialMatches || findMatches();
-    while(matches.length>0){
-      const scorePanel = document.getElementById("score").parentElement;
-      scorePanel.classList.add("combo");
-      
-      for(const m of matches){
-        for(let i=0;i<m.len;i++){
-          let rr=m.r+(m.dir==="row"?0:i);
-          let cc=m.c+(m.dir==="col"?0:i);
-          if(board[rr][cc] != "💣" && board[rr][cc] != "🚀" && board[rr][cc] != "🌈" && board[rr][cc] != "🎁"){
-            board[rr][cc] = null;
-          }
-        }
-        score += m.len * SCORE_PER_TILE;
-      }
+    animating = true;
+    let { matches } = initialMatches || findMatches();
+    
+    inactivityTime = 0;
 
-      for (const special of specialCreates) {
-          if (board[special.r][special.c] !== null) {
-              if (special.type === "🌈") discoInStock++;
-              else if (special.type === "🚀") rocketsInStock++;
-              board[special.r][special.c] = special.type;
-          }
-      }
-      
-      updateHUD();
-      
-      renderBoard();
-      await wait(300);
-      
-      scorePanel.classList.remove("combo");
-      applyGravity();
-      renderBoard();
-      await wait(200);
-      let nextMatches = findMatches();
-      matches = nextMatches.matches;
-      specialCreates = nextMatches.specialCreates;
+    while(matches.length > 0){
+        const scorePanel = document.getElementById("score").parentElement;
+        scorePanel.classList.add("combo");
+
+        let cellsToClear = new Set();
+        let newSpecialTile = null;
+
+        for(const m of matches){
+            if (m.len >= 4 && !newSpecialTile) {
+                let specialIcon = m.len >= 5 ? DISCO_ICON : ROCKET_ICON;
+                let specialPos = {
+                    r: m.r + (m.dir === 'col' ? Math.floor(m.len / 2) : 0),
+                    c: m.c + (m.dir === 'row' ? Math.floor(m.len / 2) : 0)
+                };
+                newSpecialTile = { pos: specialPos, icon: specialIcon };
+
+                for(let i=0; i<m.len; i++){
+                    let rr = m.r + (m.dir === "row" ? 0 : i);
+                    let cc = m.c + (m.dir === "col" ? 0 : i);
+                    if(rr !== specialPos.r || cc !== specialPos.c){
+                         if(board[rr][cc] !== "🎁") cellsToClear.add(`${rr},${cc}`);
+                         score += SCORE_PER_TILE;
+                    }
+                }
+            } else {
+                for(let i=0; i<m.len; i++){
+                    let rr = m.r + (m.dir === "row" ? 0 : i);
+                    let cc = m.c + (m.dir === "col" ? 0 : i);
+                    if(board[rr][cc] !== "🎁") cellsToClear.add(`${rr},${cc}`);
+                    score += SCORE_PER_TILE;
+                }
+            }
+        }
+        
+        cellsToClear.forEach(coord => {
+            const [r, c] = coord.split(',').map(Number);
+            const cell = document.getElementById('grid').children[r * COLS + c];
+            if (cell) cell.classList.add('exploding');
+        });
+        
+        await wait(300);
+
+        cellsToClear.forEach(coord => {
+            const [r, c] = coord.split(',').map(Number);
+            board[r][c] = null;
+        });
+        
+        if(newSpecialTile){
+            board[newSpecialTile.pos.r][newSpecialTile.pos.c] = newSpecialTile.icon;
+        }
+
+        updateHUD();
+        renderBoard();
+        await wait(200);
+        
+        scorePanel.classList.remove("combo");
+        applyGravity();
+        renderBoard();
+        await wait(200);
+        
+        let nextMatches = findMatches();
+        matches = nextMatches.matches;
     }
+
     checkWin();
     animating=false;
   }
+  
+  async function explodeBomb(r, c) {
+    animating = true;
+    await animateBombEffect(r, c);
 
-  function explodeBomb(r,c){
-    let destroyedCount = 0;
-    let cellsToExplode = [];
-    for(let dr=-1;dr<=1;dr++){
-      for(let dc=-1;dc<=1;dc++){
-        let nr=r+dr, nc=c+dc;
-        if(nr>=0 && nr<ROWS && nc>=0 && nc<COLS && board[nr][nc]!=null){
-          if(board[nr][nc] !== "🎁" && board[nr][nc] !== "💣" && board[nr][nc] !== "🚀" && board[nr][nc] !== "🌈"){
-            cellsToExplode.push({r: nr, c: nc});
-          }
+    const cellsToExplode = [];
+    for (let dr = -1; dr <= 1; dr++) {
+        for (let dc = -1; dc <= 1; dc++) {
+            if (dr === 0 && dc === 0) continue;
+            const nr = r + dr, nc = c + dc;
+            if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS && board[nr][nc] != null && board[nr][nc] !== "🎁") {
+                cellsToExplode.push({r: nr, c: nc});
+            }
         }
+    }
+    
+    for (let i = cellsToExplode.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cellsToExplode[i], cellsToExplode[j]] = [cellsToExplode[j], cellsToExplode[i]];
+    }
+
+    for (const cell of cellsToExplode) {
+      const gridCell = document.getElementById('grid').children[cell.r * COLS + cell.c];
+      if (gridCell) {
+          gridCell.classList.add('cascading-exploding');
+          score += SCORE_PER_TILE;
+          updateHUD();
+          board[cell.r][cell.c] = null;
+          await wait(75);
       }
     }
-    
-    cellsToExplode.forEach(cell => {
-      board[cell.r][cell.c] = null;
-      destroyedCount++;
-    });
-    
-    score += destroyedCount * SCORE_PER_BOMB_TILE;
-    document.getElementById("message").textContent = `💣 ${destroyedCount} tuiles détruites !`;
-    applyGravity();
-    renderBoard();
-    checkWin();
-  }
   
-  function explodeRocket(r,c, direction){
-    let cellsToExplode = [];
-    if(direction === "row"){
-      for(let j=0; j<COLS; j++) cellsToExplode.push({r, c: j});
-    } else {
-      for(let i=0; i<ROWS; i++) cellsToExplode.push({r: i, c});
-    }
-    
-    let destroyedCount = 0;
-    cellsToExplode.forEach(cell => {
-      board[cell.r][cell.c] = null;
-      destroyedCount++;
-    });
-    score += destroyedCount * SCORE_PER_ROCKET_TILE;
-    document.getElementById("message").textContent = `🚀 Ligne / Colonne détruite !`;
     applyGravity();
     renderBoard();
-    checkWin();
-  }
+    await wait(400);
   
-  function explodeDisco(r, c){
-    const targetIcon = board[r][c];
-    let cellsToExplode = [];
-    for(let i=0; i<ROWS; i++){
-      for(let j=0; j<COLS; j++){
-        if(board[i][j] === targetIcon){
-          cellsToExplode.push({r: i, c: j});
-        }
-      }
-    }
-    
-    let destroyedCount = 0;
-    cellsToExplode.forEach(cell => {
-      board[cell.r][cell.c] = null;
-      destroyedCount++;
-    });
-    score += destroyedCount * SCORE_PER_ROCKET_TILE;
-    document.getElementById("message").textContent = `🌈 Toutes les tuiles ${targetIcon} ont explosé !`;
-    applyGravity();
-    renderBoard();
+    await handleMatches();
+    animating = false;
     checkWin();
   }
 
@@ -522,52 +857,33 @@
       ({ matches } = findMatches());
     }
   }
-  
-  function bombsOnBoard(){
-    let count = 0;
-    for(let r=0;r<ROWS;r++){
-      for(let c=0;c<COLS;c++){
-        if(board[r][c]==="💣") count++;
-      }
-    }
-    return count;
-  }
 
   function startLevel(){
     clearInterval(timerInterval);
-    if(bombTimer){ clearTimeout(bombTimer); bombTimer=null; }
+    clearInterval(inactivityTimer);
     
-    const idx = Math.min(level - 1, LEVEL_CONFIGS.length - 1);
+    const idx = (level - 1) % LEVEL_CONFIGS.length;
     levelConfig = LEVEL_CONFIGS[idx];
     ROWS = levelConfig.rows;
     COLS = levelConfig.cols;
 
     score = 0;
-    bombsUsed = 0;
-    timeLeft = Math.max(BASE_TIME - (level-1) * 10, 30);
-    target = BASE_TARGET + (level-1) * 10;
-    nextChestScore = score + CHEST_TRIGGER_SCORE;
+    
+    timeLeft = Math.max(BASE_TIME - (level - 1) * TIME_DECREMENT_PER_LEVEL, 30);
+    target = BASE_TARGET + (level - 1) * 6; 
+
     isUsingBomb = false;
-    isUsingRocket = false;
-    isUsingDisco = false;
     levelCompleted = false;
-    chestsSpawned = 0;
+    chestSpawnedThisLevel = false;
+    inactivityTime = 0;
 
     createBoard();
     renderBoard();
 
     updateHUD();
-    document.getElementById("message").textContent = "";
     
     startTimer();
-    
-    if(level >= 3){
-      bombTimer = setTimeout(function bombLoop(){
-        if(bombsOnBoard()<MAX_BOMBS) spawnSpecial("💣");
-        if(bombsOnBoard()<MAX_BOMBS) bombTimer=setTimeout(bombLoop,60000);
-        else bombTimer=null;
-      },60000);
-    }
+    startInactivityTimer();
   }
   
   function spawnSpecial(icon){
@@ -575,9 +891,11 @@
     do {
       r = randInt(ROWS);
       c = randInt(COLS);
-    } while (board[r][c] === null || board[r][c] === "💣" || board[r][c] === "🎁" || board[r][c] === "🚀" || board[r][c] === "🌈");
+    } while (board[r][c] === null || board[r][c] === "🎁");
     board[r][c] = icon;
     renderBoard();
+    
+    displayMessage("🎁 Un coffre est apparu !", "", 2000);
   }
   
   function selectCellWrapper(r,c,el){
@@ -587,40 +905,16 @@
       explodeBomb(r, c);
       isUsingBomb = false;
       bombsInStock--;
-      document.getElementById("bombCount").textContent = bombsInStock;
-      if(bombsInStock === 0) {
-        document.getElementById("useBombBtn").style.display = 'none';
-      }
-      return;
-    }
-    
-    if(isUsingRocket){
-      explodeRocket(r, c, "row");
-      isUsingRocket = false;
-      rocketsInStock--;
-      document.getElementById("rocketCount").textContent = rocketsInStock;
-      if(rocketsInStock === 0) {
-        document.getElementById("useRocketBtn").style.display = 'none';
-      }
-      return;
-    }
-    
-    if(isUsingDisco){
-      explodeDisco(r, c);
-      isUsingDisco = false;
-      discoInStock--;
-      document.getElementById("useDiscoBtn").style.display = 'none';
-      return;
-    }
-    
-    if(board[r][c]==="💣"){
-      explodeBomb(r,c);
+      updateHUD();
+      displayMessage(`💣 Bombe lancée !`, `+${9 * SCORE_PER_TILE} points`, 1500);
       return;
     }
     
     if(board[r][c]==="🎁"){
       bombsInStock += CHEST_BOMBS_COUNT;
-      document.getElementById("message").textContent = `🎁 Coffre ouvert ! +${CHEST_BOMBS_COUNT} bombes !`;
+      score += CHEST_POINTS;
+      displayMessage(`🎁 Coffre ouvert !`, `+${CHEST_BOMBS_COUNT} bombes et +${CHEST_POINTS} points`, 1500);
+
       board[r][c] = null;
       renderBoard();
       applyGravity();
@@ -638,33 +932,53 @@
       if(timeLeft<=0) endGame(false);
     },1000);
   }
+  
+  function startInactivityTimer(){
+    clearInterval(inactivityTimer);
+    inactivityTime = 0;
+    chestSpawnedThisLevel = false;
+    inactivityTimer = setInterval(() => {
+        if (!animating && level >= 3 && !chestSpawnedThisLevel) {
+            inactivityTime++;
+            if (inactivityTime >= INACTIVITY_TIME_FOR_CHEST) {
+                spawnSpecial("🎁");
+                chestSpawnedThisLevel = true;
+                clearInterval(inactivityTimer);
+            }
+        } else {
+            inactivityTime = 0;
+        }
+    }, 1000);
+  }
 
   function endGame(win){
     clearInterval(timerInterval);
-    if(bombTimer){ clearTimeout(bombTimer); bombTimer=null; }
+    clearInterval(inactivityTimer);
 
     if(win){
-      document.getElementById("message").textContent="🎉 Victoire ! Niveau " + level + " terminé !";
+      displayMessage("🎉 Victoire !", `Niveau ${level} terminé !`, 3000);
       stars++;
       saveGame();
       level++;
-      setTimeout(startLevel, 2000);
+      setTimeout(() => {
+        startLevel();
+      }, 3000);
     } else {
       lives--;
-      document.getElementById("message").textContent="⏳ Temps écoulé ! Perdu.";
-
       if(lives > 0){
-        document.getElementById("message").textContent += " Il vous reste " + lives + " vies.";
+        displayMessage("⏳ Temps écoulé !", `Il vous reste ${lives} vies.`, 3000);
         saveGame();
-        setTimeout(startLevel, 2000);
+        setTimeout(() => {
+            startLevel();
+        }, 3000);
       } else {
-        document.getElementById("message").textContent += " Vous n'avez plus de vies. Attendez 20 minutes pour en récupérer 3.";
+        displayMessage("⏳ Temps écoulé !", "Vous n'avez plus de vies. Attendez 2 minutes pour en récupérer 3.", 3000);
         saveGame();
         const regenerationTime = Date.now() + REGENERATION_TIME;
         localStorage.setItem('regenerationTime', regenerationTime);
         
         document.getElementById("game").style.display = "none";
-        document.getElementById("welcome").style.display = "block";
+        document.getElementById("welcome").style.display = "flex";
         document.getElementById("startBtn").disabled = true;
         startRegenerationCountdown(regenerationTime);
       }
@@ -683,8 +997,6 @@
     const gameState = {
       level: level,
       bombsInStock: bombsInStock,
-      rocketsInStock: rocketsInStock,
-      discoInStock: discoInStock,
       stars: stars,
       lives: lives
     };
@@ -697,8 +1009,6 @@
       const gameState = JSON.parse(savedState);
       level = gameState.level;
       bombsInStock = gameState.bombsInStock || 0;
-      rocketsInStock = gameState.rocketsInStock || 0;
-      discoInStock = gameState.discoInStock || 0;
       stars = gameState.stars || 0;
       lives = gameState.lives || 3;
       return true;
@@ -716,8 +1026,6 @@
     document.querySelector('.target-progress').style.width = `${progress}%`;
     
     document.getElementById("bombCount").textContent = bombsInStock;
-    document.getElementById("rocketCount").textContent = rocketsInStock;
-    document.getElementById("discoCount").textContent = discoInStock;
     
     const livesDisplay = document.getElementById("lives-display");
     livesDisplay.textContent = "❤️".repeat(lives);
@@ -726,9 +1034,8 @@
     starsDisplay.textContent = "⭐️ x" + stars;
     
     document.getElementById("buyLifeBtn").disabled = stars < STAR_COST_FOR_LIFE;
+    document.getElementById("buyTimeBtn").disabled = stars < STAR_COST_FOR_TIME;
     document.getElementById("useBombBtn").style.display = bombsInStock > 0 ? 'inline-block' : 'none';
-    document.getElementById("useRocketBtn").style.display = rocketsInStock > 0 ? 'inline-block' : 'none';
-    document.getElementById("useDiscoBtn").style.display = discoInStock > 0 ? 'inline-block' : 'none';
   }
 
   function startRegenerationCountdown(regenerationTime) {
@@ -762,7 +1069,7 @@
     document.getElementById("welcome").style.display="none";
     document.getElementById("game").style.display="block";
     if (loadGame()) {
-      document.getElementById("message").textContent = "Partie chargée ! Reprenez là où vous vous étiez arrêté.";
+      displayMessage("Partie chargée !", "Reprenez là où vous vous étiez arrêté.", 2000);
     }
     updateHUD();
     startLevel();
@@ -772,9 +1079,8 @@
     score=0;
     level=1;
     bombsInStock=0;
-    rocketsInStock=0;
-    discoInStock=0;
     stars=0;
+    lives=3;
     localStorage.removeItem('royalMatchSave');
     localStorage.removeItem('regenerationTime');
     updateHUD();
@@ -784,21 +1090,7 @@
   document.getElementById("useBombBtn").onclick = () => {
     if(bombsInStock > 0){
       isUsingBomb = true;
-      document.getElementById("message").textContent = "Cliquez sur une tuile pour utiliser une bombe !";
-    }
-  };
-
-  document.getElementById("useRocketBtn").onclick = () => {
-    if(rocketsInStock > 0){
-      isUsingRocket = true;
-      document.getElementById("message").textContent = "Cliquez sur une tuile pour utiliser une fusée !";
-    }
-  };
-
-  document.getElementById("useDiscoBtn").onclick = () => {
-    if(discoInStock > 0){
-      isUsingDisco = true;
-      document.getElementById("message").textContent = "Cliquez sur une tuile pour utiliser la boule disco !";
+      displayMessage("Cliquez sur une tuile", "pour utiliser une bombe !", 2000);
     }
   };
 
@@ -806,17 +1098,27 @@
       if (stars >= STAR_COST_FOR_LIFE) {
           stars -= STAR_COST_FOR_LIFE;
           lives++;
-          document.getElementById("message").textContent = "Vous avez acheté une vie ! Il vous reste " + lives + " vies.";
+          displayMessage("Vie achetée !", `Il vous reste ${lives} vies.`, 2000);
           updateHUD();
           saveGame();
       } else {
-          document.getElementById("message").textContent = "Pas assez d'étoiles pour acheter une vie !";
+          displayMessage("Pas assez d'étoiles !", "Il vous faut 2 étoiles pour une vie.", 2000);
+      }
+  };
+
+  document.getElementById("buyTimeBtn").onclick = () => {
+      if (stars >= STAR_COST_FOR_TIME) {
+          stars -= STAR_COST_FOR_TIME;
+          timeLeft += TIME_BONUS_FOR_STARS;
+          displayMessage("Temps acheté !", `+${TIME_BONUS_FOR_STARS} secondes`, 2000);
+          updateHUD();
+          saveGame();
+      } else {
+          displayMessage("Pas assez d'étoiles !", "Il vous faut 2 étoiles pour du temps.", 2000);
       }
   };
 </script>
-
 <script>
-  // Enregistrement simple du service worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
       navigator.serviceWorker.register('sw.js').then(function(registration) {
