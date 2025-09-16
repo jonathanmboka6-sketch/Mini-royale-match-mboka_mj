@@ -905,6 +905,7 @@
       explodeBomb(r, c);
       isUsingBomb = false;
       bombsInStock--;
+      saveGame();
       updateHUD();
       displayMessage(`💣 Bombe lancée !`, `+${9 * SCORE_PER_TILE} points`, 1500);
       return;
@@ -913,6 +914,7 @@
     if(board[r][c]==="🎁"){
       bombsInStock += CHEST_BOMBS_COUNT;
       score += CHEST_POINTS;
+      saveGame();
       displayMessage(`🎁 Coffre ouvert !`, `+${CHEST_BOMBS_COUNT} bombes et +${CHEST_POINTS} points`, 1500);
 
       board[r][c] = null;
